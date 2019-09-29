@@ -30,3 +30,12 @@ export const removeFolder=({id})=>{
 
 
 
+export const updateTracker=({id, folderName})=>{
+    console.log("Inside the tracker updater")
+    console.log(id, folderName);
+    return {
+        type:actions.updateTracker,
+        payload:{id, folderName}
+    }
+}
+
