@@ -1,8 +1,9 @@
 const File = require('./File');
+const uuid=require('uuid');
 
 class Folder {
     constructor({ name, root }) {
-        this.id = 0;
+        this.id = uuid();
         this.size = 0;
         this.name = name;
         this.dateCreated = new Date();
@@ -17,7 +18,7 @@ class Folder {
     }
     addFile({ name }) {
         let file = new File({ name })
-        this.children[++this.id] = file;
+        this.children[uuid()] = file;
         this.dateUpdated = new Date();
         this.size++;
     }
@@ -33,7 +34,7 @@ class Folder {
     }
     addFolder({ name }) {
         let newFolder = new Folder({ name });
-        this.children[++this.id] = newFolder;
+        this.children[uuid()] = newFolder;
         this.dateUpdated = new Date();
         this.size++;
     }
