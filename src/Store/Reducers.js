@@ -1,5 +1,4 @@
 import * as actions from './ActionTypes';
-import Folder from './FolderStructure/Folder';
 import uuid from 'uuid';
 
 const initialStore = {
