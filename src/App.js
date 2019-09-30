@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import "./Components/global.css"
 import AddChild from './Components/AddChild';
-import { addFile, addFolder, updateTracker, updateToolTip } from './Store/Actions';
+import { addFile, addFolder, updateTracker, updateToolTip, removeFile, removeFolder } from './Store/Actions';
+import './Components/global.css'
 
 class App extends React.Component {
   constructor(props) {
@@ -54,16 +55,21 @@ class App extends React.Component {
             <ul className="list-group">
               {this.props.folders.map(item => (
                 <div>
-                  {console.log(item)}
-                  {item.path == this.props.tracker.join('') ? <li className="list-group-item list-group-item-action" onClick={() => this.updateTracker(item.name + '/')}>{item.name}/</li> : null}
+                  {item.path == this.props.tracker.join('') ? <div className="row">
+                    <div style={{width:'80%'}}><li className="list-group-item list-group-item-action" onClick={() => this.updateTracker(item.name + '/')}><div className="row spaceBetweenCss"><div>{item.name}/</div></div></li></div><div style={{marginTop:"5px"}}><button onClick={()=>this.props.removeFolder({id:item.id})} className="btn btn-danger"><i class="far fa-trash-alt"></i></button></div>
+                  </div> : null}
                 </div>
               ))}
             </ul>
-            {this.props.files.map(item => (
-              <div>
-                {item.path == this.props.tracker.join('') ? <li style={{ backgroundColor: '#d5d5de' }} className="list-group-item " >{item.name}</li> : null}
-              </div>
-            ))}
+            <ul className="list-group">
+              {this.props.files.map(item => (
+                <div>
+                  {item.path == this.props.tracker.join('') ? <div className="row">
+                    <div style={{width:'80%'}}><li style={{ backgroundColor: '#d5d5de' }} className="list-group-item" ><div className="row spaceBetweenCss"><div>{item.name}</div></div></li></div><div style={{marginTop:"5px"}}><button onClick={()=>this.props.removeFile({id:item.id})} className="btn btn-danger"><i class="far fa-trash-alt"></i></button></div>
+                  </div> : null}
+                </div>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
@@ -84,7 +90,9 @@ const mapDispatchToProps = (dispatch) => {
     addFile: ({ name }) => dispatch(addFile({ name })),
     addFolder: ({ name }) => dispatch(addFolder({ name })),
     updateTracker: ({ name }) => dispatch(updateTracker({ name })),
-    updateToolTip: ({ index }) => dispatch(updateToolTip({ index }))
+    updateToolTip: ({ index }) => dispatch(updateToolTip({ index })),
+    removeFile:({id})=>dispatch(removeFile({id})),
+    removeFolder:({id})=>dispatch(removeFolder({id}))
   }
 }
 

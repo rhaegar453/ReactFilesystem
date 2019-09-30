@@ -25,6 +25,11 @@ const reducer = (state = initialStore, action) => {
             let splicedArr=state.tracker.filter((item, index)=>index<=action.payload);
             console.log(action.payload);
             return {...state, tracker:splicedArr}
+        case actions.removeFolder:
+            return {...state, folders:state.folders.filter(item=>item.id!==action.payload)}
+        
+        case actions.removeFile:
+            return {...state, files:state.files.filter(item=>item.id!==action.payload)}
         default:
             return state;
     }

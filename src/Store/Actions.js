@@ -7,24 +7,11 @@ export const addFile=({name})=>{
     }
 }
 
-export const removeFile=({id})=>{
-    return {
-        type:actions.removeFile,
-        payload:{id}
-    }
-}
 
 export const addFolder=({name})=>{
     return {
         type:actions.addFolder,
         payload:{name}
-    }
-}
-
-export const removeFolder=({id})=>{
-    return {
-        type:actions.removeFolder,
-        payload:{id}
     }
 }
 
@@ -48,5 +35,20 @@ export const updateToolTip=({index})=>{
     return {
         type:actions.updateToolTip,
         payload:index
+    }
+}
+
+
+export const removeFile=({id})=>{
+    return {
+        type:actions.removeFile,
+        payload:id
+    }
+}
+
+export const removeFolder=({id})=>{
+    return{
+        type:actions.removeFolder,
+        payload:id
     }
 }
