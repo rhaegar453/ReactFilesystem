@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import "./Components/global.css"
 import AddChild from './Components/AddChild';
-import { addFile, addFolder, updateTracker } from './Store/Actions';
+import { addFile, addFolder, updateTracker, updateToolTip } from './Store/Actions';
 
 class App extends React.Component {
   constructor(props) {
@@ -36,26 +36,31 @@ class App extends React.Component {
       <div>
         <div className="centeredCss" style={{ marginTop: "20px" }}>
           <div className="col-md-6" >
-            <div className="row">
-            </div>
             <div className="spaceAroundCss" style={{ width: "100%" }}>
               <button className="btn btn-sm btn-primary" onClick={this.promptFileBox}>Add File</button>
               <button className="btn btn-sm btn-primary" onClick={this.promptFolderBox}>Add Folder</button>
             </div>
-            {this.state.toggleAddFile ? <AddChild /> : null}
-            {this.state.toggleAddFolder ? <AddChild folder={true} /> : null}
           </div>
         </div>
-        <div>
-          <p>{this.props.tracker}</p>
+        <div style={{marginLeft:"40px"}}>
+          {/* <p>{this.props.tracker}</p> */}
+          <div className="row">
+          {this.props.tracker.map((item, index)=>(
+            <div>
+              {index==0?<span onClick={()=>this.props.updateToolTip({index})} class="badge badge-success">Root/</span>:<span onClick={()=>this.props.updateToolTip({index})} class="badge badge-success">{item}</span>}
+              </div>
+          ))}
+          </div>
+          <ul className="list-group">
           {this.props.folders.map(item=>(
             <div>
-              {item.includes(this.props.tracker.join(''))?<p onClick={()=>this.updateTracker(item[1]+'/')}>{item[1]}/</p>:null}
+              {item.path==this.props.tracker.join('')?<li className="list-group-item list-group-item-action" onClick={()=>this.updateTracker(item.name+'/')}>{item.name}/</li>:null}
             </div>
-          ))}
+          ))}            
+          </ul>
           {this.props.files.map(item=>(
             <div>
-              {item.includes(this.props.tracker.join(''))?<p>{item[1]}</p>:null}
+              {item.path==this.props.tracker.join('')?<li style={{backgroundColor:'#d5d5de'}} className="list-group-item " >{item.name}</li>:null}
             </div>
           ))}
         </div>
@@ -76,7 +81,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addFile: ({ name }) => dispatch(addFile({ name })),
     addFolder: ({ name }) => dispatch(addFolder({ name })),
-    updateTracker: ({name}) => dispatch(updateTracker({ name }))
+    updateTracker: ({name}) => dispatch(updateTracker({ name })),
+    updateToolTip:({index})=>dispatch(updateToolTip({index}))
   }
 }
 

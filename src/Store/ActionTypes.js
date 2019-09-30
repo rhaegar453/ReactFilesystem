@@ -3,4 +3,4 @@ export const removeFile='DELETE_FILE';
 export const addFolder='ADD_FOLDER';
 export const removeFolder='DELETE_FOLDER';
 export const updateTracker='UPDATE_TRACKER';
-
+export const updateToolTip='UPDATE_TOOLTIP';

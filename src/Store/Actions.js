@@ -39,3 +39,14 @@ export const updateTracker=({name})=>{
     }
 }
 
+
+
+
+export const updateToolTip=({index})=>{
+    console.log("Inside of the tooltip updater");
+    console.log(index);
+    return {
+        type:actions.updateToolTip,
+        payload:index
+    }
+}
