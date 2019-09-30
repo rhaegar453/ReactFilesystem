@@ -12,29 +12,6 @@ class App extends React.Component {
       toggleAddFile: false
     }
   }
-  getItem = ({ obj, path }) => {
-    if (path.length == 0) {
-      return obj.children;
-    }
-    else {
-      path.forEach(item => {
-        if (obj.children[item.id].children) {
-          console.log("This is without the children")
-          console.log(JSON.stringify(obj));
-          if (typeof obj.children[item.id].children == "object") {
-            obj = obj.children[item.id]
-          }
-          else {
-            return;
-          }
-        }
-        else {
-          throw new Error("Trying to navigate into a file. Not possible");
-        }
-      })
-      return obj;
-    }
-  }
 
   promptFileBox = () => {
     let value = window.prompt("Please provide the file name");
@@ -48,20 +25,18 @@ class App extends React.Component {
       this.props.addFolder({ name: value });
     }
   }
-  updateTracker = (id, folderName) => {
-    let newObj = { id, folderName };
-    this.props.updateTracker(newObj);
+  updateTracker = (name) => {
+    console.log("Inside the tracker");
+    console.log(name);
+    this.props.updateTracker({name});
   }
   render() {
-    let children = this.getItem(({ obj: this.props.root, path: this.props.tracker }))
+    console.log(this.props.tracker)
     return (
       <div>
         <div className="centeredCss" style={{ marginTop: "20px" }}>
           <div className="col-md-6" >
             <div className="row">
-              {this.props.tracker.map(item => (
-                <p>{item.name} ></p>
-              ))}
             </div>
             <div className="spaceAroundCss" style={{ width: "100%" }}>
               <button className="btn btn-sm btn-primary" onClick={this.promptFileBox}>Add File</button>
@@ -72,22 +47,17 @@ class App extends React.Component {
           </div>
         </div>
         <div>
-          {Object.keys(children).length > 0 ? <div>
-
-            {Object.keys(children).map((item, index) => (
-              <div key={index}>
-                {children[item].children ? <p onClick={() => this.updateTracker(item, children[item].name)}>{children[item].name} ></p> : <p>{children[item].name}</p>}
-              </div>
-            ))}
-          </div> : null}
-        </div>
-        <div>
-          <u>State</u>
-          {JSON.stringify(this.props.root)}
-        </div>
-        <div>
-          <u>tracker</u>
-          {JSON.stringify(this.props.tracker)}
+          <p>{this.props.tracker}</p>
+          {this.props.folders.map(item=>(
+            <div>
+              {item.includes(this.props.tracker.join(''))?<p onClick={()=>this.updateTracker(item[1]+'/')}>{item[1]}/</p>:null}
+            </div>
+          ))}
+          {this.props.files.map(item=>(
+            <div>
+              {item.includes(this.props.tracker.join(''))?<p>{item[1]}</p>:null}
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -96,9 +66,9 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    root: state.fs.root,
+    files: state.fs.files,
+    folders: state.fs.folders,
     tracker: state.fs.tracker,
-    state: state
   }
 }
 
@@ -106,7 +76,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addFile: ({ name }) => dispatch(addFile({ name })),
     addFolder: ({ name }) => dispatch(addFolder({ name })),
-    updateTracker: ({ id, folderName }) => dispatch(updateTracker({ id, folderName }))
+    updateTracker: ({name}) => dispatch(updateTracker({ name }))
   }
 }
 
